@@ -1,0 +1,22 @@
+# Executáveis compilados
+*.exe
+*.dll
+*.pdb
+
+# Arquivos temporários do Swift
+.build/
+.swiftpm/
+*.swiftmodule
+*.swiftdoc
+*.o
+*.d
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# VS Code - configurações locais
+.vscode/
