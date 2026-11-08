@@ -1,32 +1,41 @@
+
 import Foundation
 
 class TaskStorage {
 
     private let fileURL: URL
 
-    init() {
-        let fileManager = FileManager.default
+    init(fileURL: URL? = nil) {
+        let resolvedURL: URL
 
-        guard let appSupportDirectory = fileManager.urls(
-            for: .applicationSupportDirectory,
-            in: .userDomainMask
-        ).first else {
-            fatalError("Não foi possível localizar a pasta de dados.")
+        if let fileURL {
+            resolvedURL = fileURL
+        } else {
+            let fileManager = FileManager.default
+
+            guard let appSupportDirectory = fileManager.urls(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask
+            ).first else {
+                fatalError("Não foi possível localizar a pasta de dados.")
+            }
+
+            let folderURL = appSupportDirectory
+                .appendingPathComponent("SprintMate")
+
+            resolvedURL = folderURL.appendingPathComponent("tasks.json")
         }
 
-        let folderURL = appSupportDirectory
-            .appendingPathComponent("SprintMate")
-
         do {
-            try fileManager.createDirectory(
-                at: folderURL,
+            try FileManager.default.createDirectory(
+                at: resolvedURL.deletingLastPathComponent(),
                 withIntermediateDirectories: true
             )
         } catch {
             fatalError("Não foi possível criar a pasta: \(error)")
         }
 
-        fileURL = folderURL.appendingPathComponent("tasks.json")
+        self.fileURL = resolvedURL
     }
 
     func save(_ tasks: [ToDoList]) {
@@ -37,8 +46,6 @@ class TaskStorage {
             let data = try encoder.encode(tasks)
             try data.write(to: fileURL, options: .atomic)
 
-            print("Tarefas salvas com sucesso!")
-            print("Arquivo: \(fileURL.path)")
         } catch {
             print("Erro ao salvar tarefas: \(error)")
         }
@@ -49,12 +56,12 @@ class TaskStorage {
             return []
         }
 
-        print("Carregando arquivo: \(fileURL.path)")
         do {
             let data = try Data(contentsOf: fileURL)
             let decoder = JSONDecoder()
 
             return try decoder.decode([ToDoList].self, from: data)
+
         } catch {
             print("Erro ao carregar tarefas: \(error)")
             return []

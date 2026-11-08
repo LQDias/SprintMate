@@ -1,5 +1,6 @@
 import Testing
-@testable import SprintMate
+import Foundation
+@testable import ToDo
 
 // Rejeitar tarefa com título vazio
 @Test
@@ -104,4 +105,52 @@ func testDeleteTaskWithInvalidIndex() {
     #expect(manager.tasks.count == 2)
     #expect(manager.tasks[0].title == "Estudar Swift")
     #expect(manager.tasks[1].title == "Estudar Git")
+}
+
+// Salvar e recuperar tarefas de um arquivo JSON
+@Test
+func testSaveAndLoadTasks() {
+    let directory = FileManager.default.temporaryDirectory
+        .appendingPathComponent(UUID().uuidString)
+
+    let fileURL = directory.appendingPathComponent("tasks.json")
+
+    defer {
+        try? FileManager.default.removeItem(at: directory)
+    }
+
+    let storage = TaskStorage(fileURL: fileURL)
+
+    let tasks = [
+        ToDoList(title: "Estudar Swift", priority: 2),
+        ToDoList(title: "Revisar SQL", priority: 1)
+    ]
+
+    storage.save(tasks)
+
+    let loadedTasks = storage.load()
+
+    #expect(loadedTasks.count == 2)
+    #expect(loadedTasks[0].title == "Estudar Swift")
+    #expect(loadedTasks[1].title == "Revisar SQL")
+    #expect(loadedTasks[0].priority == 2)
+}
+
+// Carregar quando o arquivo ainda não existe
+@Test
+func testLoadWithoutExistingFile() {
+    let directory = FileManager.default.temporaryDirectory
+        .appendingPathComponent(UUID().uuidString)
+
+    let fileURL = directory.appendingPathComponent("tasks.json")
+
+    defer {
+        try? FileManager.default.removeItem(at: directory)
+    }
+
+    let storage = TaskStorage(fileURL: fileURL)
+
+    let loadedTasks = storage.load()
+
+    #expect(loadedTasks.isEmpty)
 }

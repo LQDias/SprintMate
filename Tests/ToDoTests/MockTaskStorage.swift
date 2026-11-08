@@ -1,4 +1,5 @@
-@testable import SprintMate
+import Foundation
+@testable import ToDo
 
 final class MockTaskStorage: TaskStorage {
 
