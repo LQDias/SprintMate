@@ -4,7 +4,7 @@ import Testing
 // Rejeitar tarefa com título vazio
 @Test
 func testAddTaskWithEmptyTitle() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     let result = manager.addTask(
         title: "",
@@ -18,7 +18,7 @@ func testAddTaskWithEmptyTitle() {
 // Concluir tarefa com índice válido
 @Test
 func testCompleteTask() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     manager.addTask(
         title: "Estudar Swift",
@@ -34,7 +34,7 @@ func testCompleteTask() {
 // Concluir tarefa com índice inválido
 @Test
 func testCompleteTaskWithInvalidIndex() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     let result = manager.completeTask(at: 0)
 
@@ -45,7 +45,7 @@ func testCompleteTaskWithInvalidIndex() {
 // Adicionar tarefa com título válido
 @Test
 func testAddTask() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     let result = manager.addTask(
         title: "Estudar Swift",
@@ -62,7 +62,7 @@ func testAddTask() {
 // Deletar tarefa com índice válido
 @Test
 func testDeleteTaskKeepsOtherTasks() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     manager.addTask(title: "Estudar Swift", priority: 1)
     manager.addTask(title: "Estudar Git", priority: 2)
@@ -79,7 +79,7 @@ func testDeleteTaskKeepsOtherTasks() {
 // Rejeitar tarefa com prioridade inválida
 @Test
 func testAddTaskWithInvalidPriority() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     let result = manager.addTask(
         title: "Estudar Swift",
@@ -93,7 +93,7 @@ func testAddTaskWithInvalidPriority() {
 // Deletar tarefa com índice inválido
 @Test
 func testDeleteTaskWithInvalidIndex() {
-    let manager = TaskManager()
+    let manager = TaskManager(storage: MockTaskStorage())
 
     manager.addTask(title: "Estudar Swift", priority: 1)
     manager.addTask(title: "Estudar Git", priority: 2)

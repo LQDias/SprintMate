@@ -1,6 +1,13 @@
 final class TaskManager {
 
-    private(set) var tasks: [SprintTask] = []
+    private(set) var tasks: [ToDoList] = []
+
+    private let storage: TaskStorage
+
+    init(storage: TaskStorage = TaskStorage()) {
+        self.storage = storage
+        self.tasks = storage.load()
+    }
 
     // adiciona tarefa
     @discardableResult
@@ -9,7 +16,7 @@ final class TaskManager {
             return false
         }
 
-        let task = SprintTask(
+        let task = ToDoList(
             title: title,
             priority: priority
         )

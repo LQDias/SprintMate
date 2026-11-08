@@ -1,6 +1,6 @@
 import Foundation
 
-final class SprintMateCLI {
+final class ToDoListCLI {
 
     private let taskManager: TaskManager
 
