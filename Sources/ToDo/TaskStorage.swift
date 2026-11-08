@@ -5,7 +5,7 @@ protocol TaskStorageProtocol {
     func load() -> [ToDoList]
 }
 
-class TaskStorage: TaskStorageProtocol {
+final class TaskStorage: TaskStorageProtocol {
 
     private let fileURL: URL
 

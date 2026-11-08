@@ -1,15 +1,15 @@
 import Foundation
 @testable import ToDo
 
-final class MockTaskStorage: TaskStorage {
+final class MockTaskStorage: TaskStorageProtocol {
 
     private(set) var savedTasks: [ToDoList] = []
 
-    override func save(_ tasks: [ToDoList]) {
+    func save(_ tasks: [ToDoList]) {
         savedTasks = tasks
     }
 
-    override func load() -> [ToDoList] {
+    func load() -> [ToDoList] {
         return savedTasks
     }
 }
