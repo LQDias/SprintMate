@@ -1,4 +1,12 @@
-final class TaskManager {
+import Foundation
+
+enum AddTaskResult: Equatable {
+    case success
+    case emptyTitle
+    case invalidPriority
+}
+
+class TaskManager {
 
     private(set) var tasks: [ToDoList] = []
 
@@ -9,39 +17,54 @@ final class TaskManager {
         self.tasks = storage.load()
     }
 
-    // adiciona tarefa
+    // Adiciona tarefa
     @discardableResult
-    func addTask(title: String, priority: Int) -> Bool {
-        guard !title.isEmpty, priority > 0 else {
-            return false
+    func addTask(title: String, priority: Int) -> AddTaskResult {
+
+        let cleanedTitle = title.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        guard !cleanedTitle.isEmpty else {
+            return .emptyTitle
+        }
+
+        guard (1...3).contains(priority) else {
+            return .invalidPriority
         }
 
         let task = ToDoList(
-            title: title,
+            title: cleanedTitle,
             priority: priority
         )
 
         tasks.append(task)
-        return true
+        storage.save(tasks)
+
+        return .success
     }
 
-    // procura um indice e marca concluida
+    // Conclui tarefa
     func completeTask(at index: Int) -> Bool {
         guard tasks.indices.contains(index) else {
             return false
         }
 
         tasks[index].isCompleted = true
+        storage.save(tasks)
+
         return true
     }
 
-    // procura um indice e deleta a tarefa
+    // Exclui tarefa
     func deleteTask(at index: Int) -> Bool {
         guard tasks.indices.contains(index) else {
             return false
         }
 
         tasks.remove(at: index)
+        storage.save(tasks)
+
         return true
     }
 }

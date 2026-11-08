@@ -63,36 +63,63 @@ final class ToDoListCLI {
     }
 
     // Cadastra uma nova tarefa
+    
     private func criarTarefa() {
-        print("Título: ", terminator: "")
+        var titulo: String
 
-        guard let titulo = readLine()?.trimmingCharacters(
-            in: .whitespacesAndNewlines
-        ), !titulo.isEmpty else {
-            print("O título não pode ficar vazio.")
-            return
+        while true {
+            print("Título: ", terminator: "")
+
+            guard let entrada = readLine() else {
+                print("\nEntrada encerrada.")
+                return
+            }
+
+            titulo = entrada.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+
+            if titulo.isEmpty {
+                print("Erro: o título não pode ficar vazio. Tente novamente.\n")
+                continue
+            }
+
+            break
         }
 
-        print("Prioridade (número inteiro positivo): ", terminator: "")
+        while true {
+            print("Prioridade (1 - Baixa, 2 - Média, 3 - Alta): ", terminator: "")
 
-        guard let entradaPrioridade = readLine()?.trimmingCharacters(
-            in: .whitespacesAndNewlines
-        ),
-        let prioridade = Int(entradaPrioridade),
-        prioridade > 0 else {
-            print("Prioridade inválida. Informe um número inteiro positivo.")
-            return
+            guard let entrada = readLine() else {
+                print("\nEntrada encerrada.")
+                return
+            }
+
+            guard let prioridade = Int(
+                entrada.trimmingCharacters(in: .whitespacesAndNewlines)
+            ) else {
+                print("Erro: informe um número inteiro entre 1 e 3.\n")
+                continue
+            }
+
+            let result = taskManager.addTask(
+                title: titulo,
+                priority: prioridade
+            )
+
+            switch result {
+            case .success:
+                print("Tarefa adicionada com sucesso!")
+                return
+
+            case .emptyTitle:
+                print("Erro: o título não pode ficar vazio.")
+                return
+
+            case .invalidPriority:
+                print("Erro: a prioridade deve ser 1, 2 ou 3. Tente novamente.\n")
+            }
         }
-
-        guard taskManager.addTask(
-            title: titulo,
-            priority: prioridade
-        ) else {
-            print("Não foi possível cadastrar a tarefa.")
-            return
-        }
-
-        print("Tarefa criada com sucesso!")
     }
 
     // Exibe todas as tarefas

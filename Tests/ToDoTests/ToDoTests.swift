@@ -12,7 +12,7 @@ func testAddTaskWithEmptyTitle() {
         priority: 2
     )
 
-    #expect(result == false)
+    #expect(result == .emptyTitle)
     #expect(manager.tasks.isEmpty)
 }
 
@@ -53,7 +53,7 @@ func testAddTask() {
         priority: 2
     )
 
-    #expect(result == true)
+    #expect(result == .success)
     #expect(manager.tasks.count == 1)
     #expect(manager.tasks[0].title == "Estudar Swift")
     #expect(manager.tasks[0].priority == 2)
@@ -87,7 +87,7 @@ func testAddTaskWithInvalidPriority() {
         priority: 0
     )
 
-    #expect(result == false)
+    #expect(result == .invalidPriority)
     #expect(manager.tasks.isEmpty)
 }
 
@@ -153,4 +153,32 @@ func testLoadWithoutExistingFile() {
     let loadedTasks = storage.load()
 
     #expect(loadedTasks.isEmpty)
+}
+
+// Rejeitar título contendo apenas espaços
+@Test
+func testAddTaskWithWhitespaceTitle() {
+    let manager = TaskManager(storage: MockTaskStorage())
+
+    let result = manager.addTask(
+        title: "   ",
+        priority: 2
+    )
+
+    #expect(result == .emptyTitle)
+    #expect(manager.tasks.isEmpty)
+}
+
+// Rejeitar prioridade acima do limite
+@Test
+func testAddTaskWithPriorityAboveLimit() {
+    let manager = TaskManager(storage: MockTaskStorage())
+
+    let result = manager.addTask(
+        title: "Estudar Swift",
+        priority: 4
+    )
+
+    #expect(result == .invalidPriority)
+    #expect(manager.tasks.isEmpty)
 }
