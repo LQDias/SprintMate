@@ -64,6 +64,7 @@ final class ToDoListCLI {
         print("3. Concluir tarefa")
         print("4. Excluir tarefa")
         print("5. Sair")
+        print("6. Consultar tarefa externa")
         print()
     }
 
