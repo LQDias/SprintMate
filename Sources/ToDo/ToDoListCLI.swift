@@ -2,10 +2,10 @@ import Foundation
 
 final class ToDoListCLI {
 
-    private let taskManager: TaskManager
+    private let viewModel: TaskListViewModel
 
-    init(taskManager: TaskManager = TaskManager()) {
-        self.taskManager = taskManager
+    init(viewModel: TaskListViewModel = TaskListViewModel()) {
+        self.viewModel = viewModel
     }
 
     // Executa o programa
@@ -102,7 +102,7 @@ final class ToDoListCLI {
                 continue
             }
 
-            let result = taskManager.addTask(
+            let result = viewModel.addTask(
                 title: titulo,
                 priority: prioridade
             )
@@ -124,7 +124,7 @@ final class ToDoListCLI {
 
     // Exibe todas as tarefas
     private func listarTarefas() {
-        let tarefas = taskManager.tasks
+        let tarefas = viewModel.tasks
 
         guard !tarefas.isEmpty else {
             print("Nenhuma tarefa cadastrada.")
@@ -146,7 +146,7 @@ final class ToDoListCLI {
 
     // Marca uma tarefa como concluída
     private func concluirTarefa() {
-        guard !taskManager.tasks.isEmpty else {
+        guard !viewModel.tasks.isEmpty else {
             print("Não há tarefas para concluir.")
             return
         }
@@ -157,7 +157,7 @@ final class ToDoListCLI {
             return
         }
 
-        guard taskManager.completeTask(at: indice) else {
+        guard viewModel.completeTask(at: indice) else {
             print("Número inválido. Não existe uma tarefa nessa posição.")
             return
         }
@@ -167,7 +167,7 @@ final class ToDoListCLI {
 
     // Exclui uma tarefa
     private func excluirTarefa() {
-        guard !taskManager.tasks.isEmpty else {
+        guard !viewModel.tasks.isEmpty else {
             print("Não há tarefas para excluir.")
             return
         }
@@ -178,7 +178,7 @@ final class ToDoListCLI {
             return
         }
 
-        guard taskManager.deleteTask(at: indice) else {
+        guard viewModel.deleteTask(at: indice) else {
             print("Número inválido. Não existe uma tarefa nessa posição.")
             return
         }
