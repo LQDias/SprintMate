@@ -10,9 +10,9 @@ class TaskManager {
 
     private(set) var tasks: [ToDoList] = []
 
-    private let storage: TaskStorage
+    private let storage: any TaskStorageProtocol
 
-    init(storage: TaskStorage = TaskStorage()) {
+    init(storage: any TaskStorageProtocol = TaskStorage()) {
         self.storage = storage
         self.tasks = storage.load()
     }

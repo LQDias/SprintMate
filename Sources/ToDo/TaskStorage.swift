@@ -1,7 +1,11 @@
-
 import Foundation
 
-class TaskStorage {
+protocol TaskStorageProtocol {
+    func save(_ tasks: [ToDoList])
+    func load() -> [ToDoList]
+}
+
+class TaskStorage: TaskStorageProtocol {
 
     private let fileURL: URL
 
