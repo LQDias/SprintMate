@@ -2,6 +2,8 @@ import Foundation
 
 final class ToDoListCLI {
 
+    private let apiService = TaskAPIService()
+
     private let viewModel: TaskListViewModel
 
     init(viewModel: TaskListViewModel = TaskListViewModel()) {
@@ -9,7 +11,7 @@ final class ToDoListCLI {
     }
 
     // Executa o programa
-    func run() {
+    func run() async {
         while true {
             mostrarMenu()
 
@@ -41,6 +43,9 @@ final class ToDoListCLI {
             case "5":
                 print("Até logo!")
                 return
+            
+            case "6":
+                await consultarTarefa()
 
             default:
                 print("Opção inválida. Tente novamente.")
@@ -60,6 +65,20 @@ final class ToDoListCLI {
         print("4. Excluir tarefa")
         print("5. Sair")
         print()
+    }
+
+    private func consultarTarefa() async {
+        do {
+            let task = try await apiService.fetchTask()
+
+            print("\n--- TAREFA EXTERNA ---")
+            print("ID: \(task.id)")
+            print("Título: \(task.title)")
+            print("Concluída: \(task.completed)")
+
+        } catch {
+            print("Erro ao consultar API: \(error)")
+        }
     }
 
     // Cadastra uma nova tarefa

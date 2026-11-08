@@ -1,2 +1,3 @@
-let app = ToDoListCLI()
-app.run()
+import Foundation
+
+await ToDoListCLI().run()
